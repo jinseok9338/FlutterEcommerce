@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shop_app/utils/addUserData.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+<<<<<<< HEAD
 import 'package:flutter/services.dart';
 import 'package:flutter_twitter_login/flutter_twitter_login.dart';
+=======
+>>>>>>> 79e11375c0b3104af62aba67e765b6ab8b96968d
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -98,7 +101,10 @@ Future<User> signInWithTwitter({BuildContext context}) async {
   );
 
   final TwitterLoginResult result = await twitterLogin.authorize();
+<<<<<<< HEAD
   //Todo Finailize the Log in Process
+=======
+>>>>>>> 79e11375c0b3104af62aba67e765b6ab8b96968d
 }
 
 //error show Dialog
