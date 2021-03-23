@@ -4,6 +4,7 @@ import 'package:shop_app/components/custom_surfix_icon.dart';
 import 'package:shop_app/components/default_button.dart';
 import 'package:shop_app/components/form_error.dart';
 import 'package:shop_app/screens/complete_profile/complete_profile_screen.dart';
+import '../SignUpUserType.dart';
 import "../signUp.dart";
 import '../../../constants.dart';
 import '../../../size_config.dart';
@@ -54,8 +55,9 @@ class _SignUpFormState extends State<SignUpForm> {
               if (_formKey.currentState.validate()) {
                 //_formKey.currentState.save();
                 try {
-                  User user = await registerWithEmailAndPassword(
-                      email, password); // Firebase Register
+                  User user =
+                      (await registerWithEmailAndPassword(email, password))
+                          as User; // Firebase Register
                   print(user);
 
                   // if user["error"] has error message then pop up

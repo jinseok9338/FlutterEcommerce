@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/components/socal_card.dart';
 import 'package:shop_app/constants.dart';
+import 'package:shop_app/screens/complete_profile/complete_profile_screen.dart';
 import 'package:shop_app/size_config.dart';
 
+import '../signUp.dart';
 import 'sign_up_form.dart';
 
 class Body extends StatelessWidget {
@@ -31,15 +33,39 @@ class Body extends StatelessWidget {
                   children: [
                     SocalCard(
                       icon: "assets/icons/google-icon.svg",
-                      press: () {},
+                      press: () async {
+                        try {
+                          await signInWithGoogle();
+                          Navigator.pushNamed(
+                              context, CompleteProfileScreen.routeName);
+                        } catch (e) {
+                          error_showDialog(context);
+                        }
+                      },
                     ),
                     SocalCard(
                       icon: "assets/icons/facebook-2.svg",
-                      press: () {},
+                      press: () async {
+                        try {
+                          await signInWithFacebook();
+                          Navigator.pushNamed(
+                              context, CompleteProfileScreen.routeName);
+                        } catch (e) {
+                          error_showDialog(context);
+                        }
+                      },
                     ),
                     SocalCard(
                       icon: "assets/icons/twitter.svg",
-                      press: () {},
+                      press: () async {
+                        try {
+                          await signInWithTwitter();
+                          Navigator.pushNamed(
+                              context, CompleteProfileScreen.routeName);
+                        } catch (e) {
+                          error_showDialog(context);
+                        }
+                      },
                     ),
                   ],
                 ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/components/no_account_text.dart';
 import 'package:shop_app/components/socal_card.dart';
+import 'package:shop_app/screens/home/home_screen.dart';
 import '../../../size_config.dart';
 import 'sign_form.dart';
+import "../../sign_up/signUp.dart";
 
 class Body extends StatelessWidget {
   @override
@@ -37,15 +39,37 @@ class Body extends StatelessWidget {
                   children: [
                     SocalCard(
                       icon: "assets/icons/google-icon.svg",
-                      press: () {}, //Todo Make Sign in with google account
+                      press: () async {
+                        try {
+                          await signInWithGoogle();
+                          Navigator.pushNamed(context, HomeScreen.routeName);
+                        } catch (e) {
+                          error_showDialog(context);
+                        }
+                      }, //Todo Make Sign in with google account
                     ),
                     SocalCard(
                       icon: "assets/icons/facebook-2.svg",
-                      press: () {}, //Todo Make Sign in with facebook account
+                      press: () async {
+                        try {
+                          await signInWithFacebook();
+                          Navigator.pushNamed(context, HomeScreen.routeName);
+                        } catch (e) {
+                          error_showDialog(context);
+                        }
+                      }, //Todo Make Sign in with facebook account
                     ),
                     SocalCard(
                       icon: "assets/icons/twitter.svg",
-                      press: () {}, //Todo Make Sign in with twitter account
+                      press: () async {
+                        try {
+                          await signInWithTwitter();
+                          Navigator.pushNamed(context, HomeScreen.routeName);
+                        } catch (e) {
+                          print(e);
+                          error_showDialog(context);
+                        }
+                      }, //Todo Make Sign in with twitter account
                     ),
                   ],
                 ),

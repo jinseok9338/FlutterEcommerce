@@ -4,24 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shop_app/utils/addUserData.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-<<<<<<< HEAD
-import 'package:flutter/services.dart';
+
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_twitter_login/flutter_twitter_login.dart';
-=======
->>>>>>> 79e11375c0b3104af62aba67e765b6ab8b96968d
+
+import 'SignUpUserType.dart';
+import 'package:dotenv/dotenv.dart' show load, env;
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-Future<User> registerWithEmailAndPassword(String email, String password) async {
+Future<SignupUser> registerWithEmailAndPassword(
+    String email, String password) async {
   //Create User
   final UserCredential user = await _auth
       .createUserWithEmailAndPassword(
         email: email,
         password: password,
       )
-      .catchError((onError) =>
-          ({"error": "There has been an error with registration"}) as User);
+      .catchError((onError) => ({
+            "error": "There has been an error with registration"
+          }) as SignupUser);
   print("Sign Up Suceessful with");
   print(user);
 
@@ -44,12 +47,12 @@ Future<User> registerWithEmailAndPassword(String email, String password) async {
   print(userData);
 
   //Navigate to Login page
-  return userData as User;
+  return userData as SignupUser;
 }
 
 //SignUpWithGoogle
 
-Future<User> signInWithGoogle({BuildContext context}) async {
+Future<Map<String, dynamic>> signInWithGoogle({BuildContext context}) async {
   FirebaseAuth auth = FirebaseAuth.instance;
   User user;
 
@@ -75,36 +78,78 @@ Future<User> signInWithGoogle({BuildContext context}) async {
       if (e.code == 'account-exists-with-different-credential') {
         // handle the error here
         print(e.code);
-        return {"error": "There has been an error when Registering"} as User;
+        return {"error": "There has been an error when Registering"};
       } else if (e.code == 'invalid-credential') {
         // handle the error here
         print(e.code);
-        return {"error": "There has been an error when Registering"} as User;
+        return {"error": "There has been an error when Registering"};
       }
     } catch (e) {
       // handle the error here
       print(e.code);
-      return {"error": "There has been an error when Registering"} as User;
+      return {"error": "There has been an error when Registering"};
     }
   }
 
-  user = addUserData(user) as User;
+  Map<String, dynamic> signedUpUser = await addUserData(user);
+  print(signedUpUser);
+
+  return signedUpUser;
+}
+
+//Signup With Twitter
+Future<Map<String, dynamic>> signInWithTwitter({BuildContext context}) async {
+  load();
+  final TwitterLogin twitterLogin = TwitterLogin(
+    consumerKey: "fTkIVLiSBLqER0BaGyAh4rajr",
+    consumerSecret: "rnD61diKMw2d4eUlpbAAZPRyT7f1NJGtwwoXwZ9MoDZpD2Jmz0",
+  );
+
+  // Trigger the sign-in flow
+  final TwitterLoginResult loginResult = await twitterLogin.authorize();
+
+  // Get the Logged In session
+  final TwitterSession twitterSession = loginResult.session;
+
+  // Create a credential from the access token
+  final AuthCredential twitterAuthCredential = TwitterAuthProvider.credential(
+      accessToken: twitterSession.token, secret: twitterSession.secret);
+
+  // Once signed in, return the UserCredential
+  final firebaseCredential =
+      await FirebaseAuth.instance.signInWithCredential(twitterAuthCredential);
+
+  Map<String, dynamic> user = await addUserData(firebaseCredential.user);
 
   return user;
 }
 
-//Signup With Twitter
-Future<User> signInWithTwitter({BuildContext context}) async {
-  final TwitterLogin twitterLogin = TwitterLogin(
-    consumerKey: DotEnv().env['CONSUMERKEY'],
-    consumerSecret: DotEnv().env['CONSUMERSECRET'],
-  );
+//FaceBook Login
+Future<Map<String, dynamic>> signInWithFacebook() async {
+  try {
+    // Trigger the sign-in flow
+    final AccessToken accessToken = await FacebookAuth.instance.login();
 
-  final TwitterLoginResult result = await twitterLogin.authorize();
-<<<<<<< HEAD
-  //Todo Finailize the Log in Process
-=======
->>>>>>> 79e11375c0b3104af62aba67e765b6ab8b96968d
+    // Create a credential from the access token
+    final OAuthCredential credential = FacebookAuthProvider.credential(
+      accessToken.token,
+    );
+
+    // Once signed in, return the UserCredential
+    final firebaseCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+    Map<String, dynamic> user = await addUserData(firebaseCredential.user);
+    return user;
+  } on FacebookAuthException catch (e) {
+    // handle the FacebookAuthException
+    print(e.message);
+    return {"error": "There has been an error when Registering"};
+  } on FirebaseAuthException catch (e) {
+    // handle the FirebaseAuthException
+    print(e.code);
+    return {"error": "There has been an error when Registering"};
+  } finally {}
 }
 
 //error show Dialog
