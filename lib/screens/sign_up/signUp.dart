@@ -100,9 +100,9 @@ Future<Map<AuthUser, dynamic>> signInWithGoogle({BuildContext context}) async {
 Future<Map<String, dynamic>> signInWithTwitter({BuildContext context}) async {
   load();
   final TwitterLogin twitterLogin = TwitterLogin(
-    consumerKey: "fTkIVLiSBLqER0BaGyAh4rajr",
-    consumerSecret: "rnD61diKMw2d4eUlpbAAZPRyT7f1NJGtwwoXwZ9MoDZpD2Jmz0",
-  );
+      //consumerKey:
+      //consumerSecret:
+      );
 
   // Trigger the sign-in flow
   final TwitterLoginResult loginResult = await twitterLogin.authorize();
