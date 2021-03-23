@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_app/routes.dart';
 import 'package:shop_app/screens/profile/profile_screen.dart';
 import 'package:shop_app/screens/splash/splash_screen.dart';
+import 'package:shop_app/state/userState.dart';
 import 'package:shop_app/theme.dart';
 import 'package:dotenv/dotenv.dart' show load, env;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -11,7 +13,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   load();
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AuthUserModel(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

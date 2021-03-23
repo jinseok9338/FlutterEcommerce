@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shop_app/state/AuthUser.dart';
 import 'package:shop_app/utils/addUserData.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -52,7 +53,7 @@ Future<SignupUser> registerWithEmailAndPassword(
 
 //SignUpWithGoogle
 
-Future<Map<String, dynamic>> signInWithGoogle({BuildContext context}) async {
+Future<Map<AuthUser, dynamic>> signInWithGoogle({BuildContext context}) async {
   FirebaseAuth auth = FirebaseAuth.instance;
   User user;
 
@@ -78,20 +79,18 @@ Future<Map<String, dynamic>> signInWithGoogle({BuildContext context}) async {
       if (e.code == 'account-exists-with-different-credential') {
         // handle the error here
         print(e.code);
-        return {"error": "There has been an error when Registering"};
       } else if (e.code == 'invalid-credential') {
         // handle the error here
         print(e.code);
-        return {"error": "There has been an error when Registering"};
       }
     } catch (e) {
       // handle the error here
       print(e.code);
-      return {"error": "There has been an error when Registering"};
     }
   }
 
-  Map<String, dynamic> signedUpUser = await addUserData(user);
+  Future<Map<AuthUser, dynamic>> signedUpUser =
+      (await addUserData(user)) as Future<Map<AuthUser, dynamic>>;
   print(signedUpUser);
 
   return signedUpUser;
